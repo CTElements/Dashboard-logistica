@@ -361,7 +361,6 @@
             padding: 10px;
             text-align: center;
             cursor: pointer;
-            border-radius: 4px;
             color: var(---text_color_1);
         }
         .painel_filter_dates_header{
@@ -377,6 +376,7 @@
           border: 1px solid var(---border_color);
           padding: 5px 10px;
           border-radius: 10px;
+           color: var(---text_color_2);
         }
         .painel_filter_dates_header input::placeholder{
            color: var(---text_color_2);
@@ -399,6 +399,9 @@
         }
         #current-month{
            color: var(---text_color_1);
+        }
+          #current-month::first-letter {
+          text-transform: capitalize;
         }
         .painel_filter_date_btns{
           width: 100%;
@@ -425,8 +428,24 @@
         .painel_filter_date_btn_cancel{
           color: var(---text_color_2);
         }
+      
+        .range {
+            background-color:  var(---text_color_2);
+            user-select: none;
+        }
+         .selected {
+            background-color: var(---black_1)!important;
+            color: var(---black_2);
+           /* border-top-left-radius: 10px; */
+        }
+       
     
     </style>
+
+
+
+
+
 </head>
 <body>
   <div class="painel_base">
@@ -633,7 +652,7 @@
                       <div class="painel_filter_dates">
                         <div class="painel_filter_dates_header">
                           <input type="text" id="start-date" placeholder="Data de Início">
-                          <button id="next-month">&rarr;</button>
+                          <button>&rarr;</button>
                           <input type="text" id="end-date" placeholder="Data de Fim">
                         </div>
                         <div class="painel_filter_dates_preview">
@@ -643,36 +662,7 @@
                         </div>
                         <div class="painel_filter_dates_value">
                           <div class="calendar-grid">
-                            <div>1</div>
-                            <div>2</div>
-                            <div>3</div>
-                            <div>4</div>
-                            <div>5</div>
-                            <div>6</div>
-                            <div>7</div>
-                            <div>8</div>
-                            <div>9</div>
-                            <div>10</div>
-                            <div>11</div>
-                            <div>12</div>
-                            <div>13</div>
-                            <div>14</div>
-                            <div>15</div>
-                            <div>16</div>
-                            <div>17</div>
-                            <div>18</div>
-                            <div>19</div>
-                            <div>20</div>
-                            <div>21</div>
-                            <div>22</div>
-                            <div>23</div>
-                            <div>24</div>
-                            <div>25</div>
-                            <div>26</div>
-                            <div>27</div>
-                            <div>28</div>
-                            <div>29</div>
-                            <div>30</div>               
+                           
                           </div>
                         </div>
                       </div>
@@ -1034,6 +1024,7 @@
     const painel_filter = document.querySelector('.painel_right_filter_content')
     btn_add_filter.addEventListener('click',()=>{
       painel_filter.classList.toggle('hide_painel')
+      
     })
 
     const filter_data_btn = document.querySelector('.filter_data_btn')
@@ -1041,6 +1032,7 @@
     filter_data_btn.addEventListener('click',(e)=>{
       painel_filter.classList.add('hide_painel')
       painel_filter_date.classList.remove('hide_painel')
+      
     })
     var painel_filter_date_btn_cancel = document.querySelector('.painel_filter_date_btn_cancel')
     painel_filter_date_btn_cancel.addEventListener('click', (e) => {
@@ -1098,6 +1090,168 @@
             });
         });
 
+
+   
+        const datePicker = document.querySelector('.date-picker');
+        const startDateInput = document.querySelector('#start-date');
+        const endDateInput = document.querySelector('#end-date');
+        const calendarGrid = document.querySelector('.calendar-grid');
+        const currentMonthSpan = document.querySelector('#current-month');
+        const prevMonthButton = document.querySelector('#prev-month');
+        const nextMonthButton = document.querySelector('#next-month');
+        const applyButton = document.querySelector('.painel_filter_date_btn_apply');
+        const cancelButton = document.querySelector('.painel_filter_date_btn_cancel');
+        const presetButtons = document.querySelectorAll('.date-picker-presets button');
+
+        let currentDate = new Date();
+        let selectedStartDate = null;
+        let selectedEndDate = null;
+        let isSelecting = false;
+        function updateCalendar() {
+          const year = currentDate.getFullYear();
+          const month = currentDate.getMonth();
+          const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+          currentMonthSpan.textContent = currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+          calendarGrid.innerHTML = '';
+
+          for (let i = 1; i <= daysInMonth; i++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.textContent = i;
+            const date = new Date(year, month, i);
+
+            if (isDateInRange(date)) {
+              dayDiv.classList.add('range');
+            }
+            if (isSameDate(date, selectedStartDate) || isSameDate(date, selectedEndDate)) {
+              dayDiv.classList.add('selected');
+            }
+
+            dayDiv.addEventListener('mousedown', () => startSelecting(year, month, i));
+            dayDiv.addEventListener('mousemove', () => continueSelecting(year, month, i));
+            dayDiv.addEventListener('mouseup', () => stopSelecting());
+            calendarGrid.appendChild(dayDiv);
+          }
+        }
+
+        function isDateInRange(date) {
+          if (!selectedStartDate || !selectedEndDate) return false;
+          return date >= selectedStartDate && date <= selectedEndDate;
+        }
+        function isSameDate(date1, date2) {
+          if (!date1 || !date2) return false;
+          return date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate();
+        }
+
+        startSelecting("2024", "6", "24")
+        
+
+        function startSelecting(year, month, day) {
+          isSelecting = true;
+          selectedStartDate = new Date(year, month, day);
+          selectedEndDate = null;
+          startDateInput.value = formatDate(selectedStartDate);
+          endDateInput.value = '';
+          updateCalendar();
+        }
+
+        function continueSelecting(year, month, day) {
+          if (isSelecting) {
+            selectedEndDate = new Date(year, month, day);
+            startDateInput.value = formatDate(selectedStartDate);
+            endDateInput.value = formatDate(selectedEndDate);
+            updateCalendar();
+          }
+        }
+
+        function stopSelecting() {
+          if (isSelecting) {
+            isSelecting = false;
+            if (!selectedEndDate) {
+              selectedEndDate = selectedStartDate;
+            }
+            startDateInput.value = formatDate(selectedStartDate);
+            endDateInput.value = formatDate(selectedEndDate);
+            updateCalendar();
+          }
+        }
+
+        function formatDate(date) {
+          if (!date) return '';
+          const day = String(date.getDate()).padStart(2, '0');
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const year = date.getFullYear();
+          return `${day}/${month}/${year}`;
+        }
+
+        prevMonthButton.addEventListener('click', () => {
+          currentDate.setMonth(currentDate.getMonth() - 1);
+          updateCalendar();
+        });
+
+        nextMonthButton.addEventListener('click', () => {
+          currentDate.setMonth(currentDate.getMonth() + 1);
+          updateCalendar();
+        });
+
+        applyButton.addEventListener('click', () => {
+          console.log('clickou')
+        });
+
+        presetButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const preset = button.getAttribute('data-preset');
+            applyPreset(preset);
+          });
+        });
+
+        function applyPreset(preset) {
+          const now = new Date();
+          switch (preset) {
+            case 'ontem':
+              selectedStartDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+              selectedEndDate = selectedStartDate;
+              break;
+            case 'ultimos7dias':
+              selectedStartDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+              selectedEndDate = now;
+              break;
+            case 'ultimos30dias':
+              selectedStartDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
+              selectedEndDate = now;
+              break;
+            case 'ultimos90dias':
+              selectedStartDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 90);
+              selectedEndDate = now;
+              break;
+            case 'ultimos365dias':
+              selectedStartDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 365);
+              selectedEndDate = now;
+              break;
+            case 'ultimoMes':
+              const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+              selectedStartDate = new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1);
+              selectedEndDate = new Date(lastMonth.getFullYear(), lastMonth.getMonth() + 1, 0);
+              break;
+            case 'ultimos12meses':
+              selectedStartDate = new Date(now.getFullYear(), now.getMonth() - 12, 1);
+              selectedEndDate = new Date(now.getFullYear(), now.getMonth(), 0);
+              break;
+            case 'anoPassado':
+              selectedStartDate = new Date(now.getFullYear() - 1, 0, 1);
+              selectedEndDate = new Date(now.getFullYear() - 1, 11, 31);
+              break;
+          }
+          startDateInput.value = formatDate(selectedStartDate);
+          endDateInput.value = formatDate(selectedEndDate);
+          updateCalendar();
+        }
+
+        // Initialize calendar
+        updateCalendar();
+     
   </script>
 </body>
 </html>
