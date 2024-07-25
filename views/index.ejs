@@ -146,6 +146,7 @@
        .filter_result{
         display: flex;
         align-items: center;
+        gap: 20px;
        }
        .filter_content{
         border-radius: 10px;
@@ -162,7 +163,18 @@
          user-select: none;
        }
        .filter_content_date{
-        margin-right: 20px;
+        align-items: center;
+        display: flex;
+        gap: 5px;
+       }
+       .filter_content_date .texts span{
+        color: var(---text_color_1)!important;
+        user-select: none;
+       }
+       .filter_content_date .texts{
+         align-items: center;
+        display: flex;
+        gap: 10px;
        }
        .button_filter span{
          color: var(---icon_color_1);
@@ -245,7 +257,18 @@
         border: 1px solid var(---border_color);
         padding: 20px;
         min-width: 260px;
+        height: 590px;
+        overflow-y: scroll;
        }
+       .painel_right_filter_content {
+        overflow: scroll;
+        -ms-overflow-style: none;  /* Para Internet Explorer e Edge */
+        scrollbar-width: none;  /* Para Firefox */
+      }
+
+      .painel_right_filter_content::-webkit-scrollbar {
+        display: none;  /* Para Chrome, Safari e Opera */
+      }
 
         .painel_right_filter_content input {
             width: 14px;
@@ -480,10 +503,21 @@
             <div class="painel_right_header">
                 <div class="filter_result">
                     <div class="filter_content filter_content_date">
-                        <span>Mês: <Strong class="filter_result_date">Julio</Strong></span>
+                        <span>Data:</span>
+                        <div class="texts">
+                          <span class="dataStartPreview"></span>
+                          <span>→</span>
+                          <span class="dataEndPreview"></span>
+                        </div>
                     </div>
                     <div class="filter_content">
-                        <span>Status: <Strong class="filter_result_status">Emitida DANFE</Strong></span>
+                        <span>Status: <Strong class="filter_result_status filter_result_value">Emitida DANFE</Strong></span>
+                    </div>
+                    <div class="filter_content">
+                      <span>Operador: <Strong class="filter_result_status filter_result_operator_value">Todos</Strong></span>
+                    </div>
+                    <div class="filter_content">
+                      <span>Transportadora: <Strong class="filter_result_status filter_result_shipping_value">Todas</Strong></span>
                     </div>
                 </div>
                 <div class="filter_events">
@@ -511,9 +545,9 @@
                               <i class="fa-solid fa-calendar-check"></i>
                             </div>
                             <div class="texts">
-                              <span class="dataStart">24/07/2024</span>
+                              <span class="dataStart"></span>
                               <span>→</span>
-                              <span class="dataEnd">24/07/2024</span>
+                              <span class="dataEnd"></span>
                             </div>
                           </div>
                         </div>
@@ -524,44 +558,44 @@
                       <h2 class="filter_title">Status</h2>
                       <form>
                         <div class="filter_status_input">
-                          <input checked type="radio" id="emitida" name="emitida">
+                          <input checked type="radio" id="emitida" name="Emitida DANFE" data-type="status">
                           <label for="emitida">Emitida DANFE</label>
                         </div>
                         <div class="filter_status_input">
-                          <input type="radio" id="status_pendente" name="pendente">
+                          <input type="radio" id="status_pendente" name="Pendente" data-type="status">
                           <label for="status_pendente">Pendente</label>
                         </div>
                         <div class="filter_status_input">
-                          <input type="radio" id="status_cancelada" name="cancelada">
+                          <input type="radio" id="status_cancelada" name="Cancelada" data-type="status">
                           <label for="status_cancelada">Cancelada</label>
                         </div>
                         <div class="filter_status_input">
-                          <input type="radio" id="autorizada" name="autorizada">
+                          <input type="radio" id="autorizada" name="Autorizada" data-type="status">
                           <label for="autorizada">Autorizada</label>
                         </div>                                    
                         <div class="filter_status_show_more show_more show_more_hide">
                             <div class="filter_status_input">
-                              <input type="radio" id="aguardando_recibo" name="aguardando_recibo">
+                              <input type="radio" id="aguardando_recibo" name="Aguardando recibo" data-type="status">
                               <label for="aguardando_recibo">Aguardando recibo</label>
                             </div>
                             <div class="filter_status_input">
-                              <input type="radio" id="rejeitada" name="rejeitada">
+                              <input type="radio" id="rejeitada" name="Rejeitada" data-type="status">
                               <label for="rejeitada">Rejeitada</label>
                             </div>
                             <div class="filter_status_input">
-                              <input type="radio" id="aguardando_protocolo" name="aguardando_protocolo">
+                              <input type="radio" id="aguardando_protocolo" name="Aguardando protocolo" data-type="status">
                               <label for="aguardando_protocolo">Aguardando protocolo</label>
                             </div>
                             <div class="filter_status_input">
-                              <input type="radio" id="denegada" name="denegada">
+                              <input type="radio" id="denegada" name="Denegada" data-type="status">
                               <label for="denegada">Denegada</label>
                             </div>
                             <div class="filter_status_input">
-                              <input type="radio" id="consulta" name="consulta">
+                              <input type="radio" id="consulta" name="Consulta situação" data-type="status">
                               <label for="consulta">Consulta situação</label>
                             </div>
                             <div class="filter_status_input">
-                              <input type="radio" id="bloqueada" name="bloqueada">
+                              <input type="radio" id="bloqueada" name="Bloqueada" data-type="status">
                               <label for="bloqueada">Bloqueada</label>
                             </div>
                         </div>
@@ -573,15 +607,15 @@
                       <h2 class="filter_title">Operador</h2>
                       <form>
                         <div class="filter_operator_input">
-                          <input checked type="radio" id="todos" name="todos">
+                          <input checked type="radio" id="todos" name="Todos" data-type="operador">
                           <label for="todos">Todos</label>
                         </div>
                         <div class="filter_operator_input">
-                          <input type="radio" id="vapt" name="vapt">
+                          <input type="radio" id="vapt" name="VAPT" data-type="operador">
                           <label for="vapt">VAPT</label>
                         </div>
                         <div class="filter_operator_input">
-                          <input type="radio" id="vandemmia" name="vandemmia">
+                          <input type="radio" id="vandemmia" name="Vandemmia" data-type="operador">
                           <label for="vandemmia">Vandemmia</label>
                         </div>
                       </form>
@@ -591,44 +625,44 @@
                       <h2 class="filter_title">Transportadora</h2>
                       <form>
                         <div class="filter_shipping_company_input">
-                          <input checked type="radio" id="todos" name="todos">
-                          <label for="todos">Todos</label>
+                          <input checked type="radio" id="todos" name="Todas" data-type="shipping_company">
+                          <label for="todos">Todas</label>
                         </div>
                         <div class="filter_shipping_company_input">
-                          <input type="radio" id="movvi" name="movvi">
+                          <input type="radio" id="movvi" name="Movvi" data-type="shipping_company">
                           <label for="movvi">Movvi</label>
                         </div>
                         <div class="filter_shipping_company_input">
-                          <input type="radio" id="expresso" name="expresso">
+                          <input type="radio" id="expresso" name="Expresso São Miguel" data-type="shipping_company">
                           <label for="expresso">Expresso São Miguel</label>
                         </div>
                         <div class="filter_shipping_company_input">
-                          <input type="radio" id="solistica" name="solistica">
+                          <input type="radio" id="solistica" name="Solistica" data-type="shipping_company">
                           <label for="solistica">Solistica</label>
                         </div>                     
                         <div class="filter_shipping_company_show_more show_more show_more_hide">
                           <div class="filter_shipping_company_input">
-                            <input type="radio" id="jamef" name="jamef">
+                            <input type="radio" id="jamef" name="Jamef" data-type="shipping_company">
                             <label for="jamef">Jamef</label>
                           </div>
                           <div class="filter_shipping_company_input">
-                            <input type="radio" id="amazon" name="amazon">
+                            <input type="radio" id="amazon" name="Amazon" data-type="shipping_company">
                             <label for="amazon">Amazon</label>
                           </div>
                           <div class="filter_shipping_company_input">
-                            <input type="radio" id="mercado_livre" name="mercado_livre">
+                            <input type="radio" id="mercado_livre" name="Mercado Livre" data-type="shipping_company">
                             <label for="mercado_livre">Mercado Livre</label>
                           </div>
                           <div class="filter_shipping_company_input">
-                            <input type="radio" id="comsil" name="comsil">
+                            <input type="radio" id="comsil" name="Comsil" data-type="shipping_company">
                             <label for="comsil">Comsil</label>
                           </div>
                           <div class="filter_shipping_company_input">
-                            <input type="radio" id="postales" name="postales">
+                            <input type="radio" id="postales" name="Postales" data-type="shipping_company">
                             <label for="postales">Postales</label>
                           </div>
                           <div class="filter_shipping_company_input">
-                            <input type="radio" id="valdelir" name="valdelir">
+                            <input type="radio" id="valdelir" name="Valdelir Frederico" data-type="shipping_company">
                             <label for="valdelir">Valdelir Frederico</label>
                           </div>
                         </div>   
@@ -651,9 +685,9 @@
                       </div>
                       <div class="painel_filter_dates">
                         <div class="painel_filter_dates_header">
-                          <input type="text" id="start-date" placeholder="Data de Início">
+                          <input type="text" id="start-date" placeholder="">
                           <button>&rarr;</button>
-                          <input type="text" id="end-date" placeholder="Data de Fim">
+                          <input type="text" id="end-date" placeholder="">
                         </div>
                         <div class="painel_filter_dates_preview">
                           <button id="prev-month">&larr;</button>
@@ -995,17 +1029,6 @@
     inputNotChecked(input_operator)
     inputNotChecked(input_shipping_company)
 
-      function inputNotChecked(inputs){
-        inputs.forEach((radio) => {
-          radio.addEventListener('change', (e) => {
-            inputs.forEach((otherRadio) => {
-              if (otherRadio !== e.target) {
-                otherRadio.checked = false;
-              }
-            });
-          });
-        });
-      }
 
     const btn_show_more = document.querySelectorAll('.btn_show_more')
     btn_show_more.forEach((btn)=>{
@@ -1038,6 +1061,7 @@
     painel_filter_date_btn_cancel.addEventListener('click', (e) => {
       painel_filter_date.classList.add('hide_painel')
       painel_filter.classList.remove('hide_painel')
+      initDate()
     })
 
 
@@ -1057,41 +1081,7 @@
          painel_filter.classList.add('hide_painel')
     })
 
-    document.addEventListener('DOMContentLoaded', (event) => {
-            const scrollContainer = document.querySelector('.painel_right_body');
-
-            let isDown = false;
-            let startX;
-            let scrollLeft;
-
-            scrollContainer.addEventListener('mousedown', (e) => {
-                isDown = true;
-                scrollContainer.classList.add('active');
-                startX = e.pageX - scrollContainer.offsetLeft;
-                scrollLeft = scrollContainer.scrollLeft;
-            });
-
-            scrollContainer.addEventListener('mouseleave', () => {
-                isDown = false;
-                scrollContainer.classList.remove('active');
-            });
-
-            scrollContainer.addEventListener('mouseup', () => {
-                isDown = false;
-                scrollContainer.classList.remove('active');
-            });
-
-            scrollContainer.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - scrollContainer.offsetLeft;
-                const walk = (x - startX) * 3; 
-                scrollContainer.scrollLeft = scrollLeft - walk;
-            });
-        });
-
-
-   
+    
         const datePicker = document.querySelector('.date-picker');
         const startDateInput = document.querySelector('#start-date');
         const endDateInput = document.querySelector('#end-date');
@@ -1107,6 +1097,30 @@
         let selectedStartDate = null;
         let selectedEndDate = null;
         let isSelecting = false;
+
+        const dataAnterior = new Date();
+        dataAnterior.setDate(currentDate.getDate() - 30);
+        
+        function initDate(){
+          startSelecting(dataAnterior.getFullYear(), dataAnterior.getMonth(), dataAnterior.getDate())
+          endDateInput.value = formatDate(currentDate);
+          continueSelecting(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
+          stopSelecting()
+        }
+        initDate()
+
+        const lastDate = formatDate(dataAnterior)
+        const ultimateDate = formatDate(currentDate)
+        filterOptionDate(lastDate, ultimateDate)
+       
+        function filterOptionDate(start, last){
+          document.querySelector('.dataStart').innerHTML = start
+          document.querySelector('.dataEnd').innerHTML = last
+          document.querySelector('.dataStartPreview').innerHTML = start
+          document.querySelector('.dataEndPreview').innerHTML = last
+        }
+
+
         function updateCalendar() {
           const year = currentDate.getFullYear();
           const month = currentDate.getMonth();
@@ -1145,9 +1159,7 @@
             date1.getDate() === date2.getDate();
         }
 
-        startSelecting("2024", "6", "24")
-        
-
+      
         function startSelecting(year, month, day) {
           isSelecting = true;
           selectedStartDate = new Date(year, month, day);
@@ -1174,6 +1186,7 @@
             }
             startDateInput.value = formatDate(selectedStartDate);
             endDateInput.value = formatDate(selectedEndDate);
+            filterOptionDate(formatDate(selectedStartDate), formatDate(selectedEndDate)) // update field filter date
             updateCalendar();
           }
         }
@@ -1186,6 +1199,14 @@
           return `${day}/${month}/${year}`;
         }
 
+        function filterDate(date){
+          return {
+            "year": date.getFullYear(),
+            "month": String(date.getMonth() + 1).padStart(2, '0'),
+            "day": String(date.getDate()).padStart(2, '0')
+          }
+        }
+
         prevMonthButton.addEventListener('click', () => {
           currentDate.setMonth(currentDate.getMonth() - 1);
           updateCalendar();
@@ -1196,9 +1217,73 @@
           updateCalendar();
         });
 
+        function sendData(){
+          var startDate = filterDate(selectedStartDate)
+          var endDate = filterDate(selectedEndDate)
+          var invoiceStatusValue = document.querySelector('.filter_result_value').innerHTML
+          var operatorValue = document.querySelector('.filter_result_operator_value').innerHTML
+          var shippingCompanyValue = document.querySelector('.filter_result_shipping_value').innerHTML
+          getDatas(setDataApi(startDate, endDate, invoiceStatusValue, operatorValue, shippingCompanyValue))
+        }
+
+       // sendData()
+
         applyButton.addEventListener('click', () => {
-          console.log('clickou')
+          painel_filter_date.classList.add('hide_painel')
+          painel_filter.classList.remove('hide_painel')
+          sendData()
         });
+        
+          function inputNotChecked(inputs) {
+            inputs.forEach((radio) => {
+              radio.addEventListener('change', (e) => {
+                var name = e.target.name
+                const type = e.target.dataset.type
+                
+                if (type == "status") {
+                  document.querySelector('.filter_result_value').innerHTML = name
+                }
+                if (type == "operador") {
+                  document.querySelector('.filter_result_operator_value').innerHTML = name
+                }
+                if (type == "shipping_company") {
+                  document.querySelector('.filter_result_shipping_value').innerHTML = name
+                }
+                sendData()
+                inputs.forEach((otherRadio) => {
+                  if (otherRadio !== e.target) {
+                    otherRadio.checked = false;
+                  }
+                });
+              });
+            });
+          }
+       
+
+        function setDataApi(startDate, endDate, invoiceStatusValue, operatorValue, shippingCompanyValue){
+           return {
+            startDate: startDate,
+            endDate: endDate,
+            invoiceStatusValue: statusType[invoiceStatusValue],
+            operatorValue: operatorValue == "Todos" ? null : operatorValue,
+            shippingCompanyValue: shippingCompanyValue == "Todas" ? null : shippingCompanyValue
+          }
+        }
+
+
+        var statusType = {
+            "Pendente": 1,
+            "Cancelada": 2,
+            "Aguardando recibo":3,
+            "Rejeitada": 4,
+            "Autorizada": 5,
+            "Emitida DANFE": 6,
+            "Registrada": 7,
+            "Aguardando protocolo": 8,
+            "Denegada": 9,
+            "Consulta situação": 10,
+            "Bloqueada": 11
+        }
 
         presetButtons.forEach(button => {
           button.addEventListener('click', () => {
@@ -1246,11 +1331,67 @@
           }
           startDateInput.value = formatDate(selectedStartDate);
           endDateInput.value = formatDate(selectedEndDate);
+          filterOptionDate(formatDate(selectedStartDate), formatDate(selectedEndDate)) // update field filter date
           updateCalendar();
         }
 
-        // Initialize calendar
         updateCalendar();
+        sendData() // init data
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            
+            const scrollContainer = document.querySelector('.painel_right_body');
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            scrollContainer.addEventListener('mousedown', (e) => {
+              isDown = true;
+              scrollContainer.classList.add('active');
+              startX = e.pageX - scrollContainer.offsetLeft;
+              scrollLeft = scrollContainer.scrollLeft;
+            });
+
+            scrollContainer.addEventListener('mouseleave', () => {
+              isDown = false;
+              scrollContainer.classList.remove('active');
+            });
+
+            scrollContainer.addEventListener('mouseup', () => {
+              isDown = false;
+              scrollContainer.classList.remove('active');
+            });
+
+            scrollContainer.addEventListener('mousemove', (e) => {
+              if (!isDown) return;
+              e.preventDefault();
+              const x = e.pageX - scrollContainer.offsetLeft;
+              const walk = (x - startX) * 3;
+              scrollContainer.scrollLeft = scrollLeft - walk;
+            });
+          });
+
+      async function getDatas(data){
+        console.log(data)
+        try {
+            const response = await fetch(`http://localhost:3000/api`,{
+              method:"POST",
+              headers:{
+                'Content-Type':'application/json'
+              },
+              body: JSON.stringify(data)
+            })
+            if(response.status ==200){
+              const result = await response.json()
+              console.log(result)
+            }
+            
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
      
   </script>
 </body>

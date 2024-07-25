@@ -127,7 +127,8 @@ async function shippingCompany(dataList){
 
 module.exports = {
     async dataList(req, res) {
-        try {
+        try { 
+            const data_body = req.body
             const tokenBling = await getTokenBling();
             const tokenVandemmia = await vandemmia_token()
             if (!tokenBling) {
@@ -138,11 +139,12 @@ module.exports = {
                 page: 1,
                 limit: 100,
                 orderId: undefined,
-                status: 6,
+                status: data_body.invoiceStatusValue,
                 type: 1,
-                dateStart: setDateStart('2024', '07', '01'),
-                dateEnd: setDateEnd("2024", "07", "24")
+                dateStart: setDateStart(data_body.startDate.year, data_body.startDate.month, data_body.startDate.day),
+                dateEnd: setDateEnd(data_body.endDate.year, data_body.endDate.month, data_body.endDate.day)
             };
+            console.log(data_body)
 
             const invoiceBling = await invoices(data, tokenBling);
             if (invoiceBling.error) {
