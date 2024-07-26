@@ -18,6 +18,7 @@
         :root{
             ---black_1:#020202;
             ---black_2:#121212;
+            ---black_header:#121212;
             ---gray_1:#222222;
             ---gray_2:#5F5F5F;
             ---text_color_1:#eeeeee;
@@ -26,6 +27,29 @@
             ---icon_color_1:#eeeeee;
             ---icon_color_2:#1d1d1d;
             ---border_color:#333333;
+            ---icon_color_3:#eeeeee;
+            ---text_select_bg:#000000;
+            ---text_select:#ffffff;
+            ---text_range:#757575;
+            ---text_color_btn:#000000;
+        }
+        .darktheme {
+          ---text_color_btn:#ffffff;
+           ---text_select_bg:#000000;
+            ---text_range:#ffffff;
+            ---black_1:#f3f3f3;
+            ---black_header:#6734FF;
+            ---black_2:#ffffff;
+            ---gray_1:#f3f3f3;
+            ---gray_2:#5F5F5F;
+            ---text_color_1:#000000;
+            ---text_color_2:#000000;
+            ---text_select:#ffffff;
+            ---logo_color:#ffffff;
+            ---icon_color_1:#ffffff;
+            ---icon_color_2:#1d1d1d;
+            ---border_color:#cacaca;
+            ---icon_color_3:#000000;
         }
       .painel_base{
         width: 100%;
@@ -33,17 +57,16 @@
       .painel_header{
         width: 100%;
         height: 90px;
-        background: var(---black_2);
+        background: var(---black_header);
       }
       .painel_body{
         width: 100%;
         display: flex;
-        align-items: center;
       }
       .painel_left{
         width: 6%;
         background: var(---black_1);
-        height: 100vh;
+        /* height: 100vh; */
       }
       .painel_left .icones{
         display: flex;
@@ -53,9 +76,10 @@
         padding: 20px 0;
       }
       .painel_left .icones i{
-        color: var(---icon_color_1);
+        color: var(---icon_color_3);
         font-size: 21px;
         cursor: pointer;
+        opacity: 0.3;
       }
       .painel_left .icones .icon_list{
         margin-bottom: 20px;
@@ -64,7 +88,7 @@
       .painel_right{
         width: 94%;
         background: var(---black_2);
-        height: 100vh;
+        /* height: 100vh; */
       }
       .painel_right_header{
         width: 100%;
@@ -97,13 +121,12 @@
         height: 42px;
         border-radius: 12px;
         border: none;
-        padding-left: 15px;
-        background: var(---gray_2);
-        color: var(---icon_color_1);
+        padding-left: 50px;
+        background: var(---gray_1);
+        color: var(---text_color_1);
       }
       .bar_search form input::placeholder{
-        color: var(---icon_color_1);
-        padding-left: 35px;
+        color: var(---text_color_1);
       }
       .bar_search .icon{
         height: 42px;
@@ -116,7 +139,7 @@
         pointer-events: none;
       }
       .bar_search .icon i{
-       color: var(---icon_color_1);
+       color: var(---icon_color_3);
         font-size: 21px;
       }
       .painel_header .icones .icones_content{
@@ -177,7 +200,7 @@
         gap: 10px;
        }
        .button_filter span{
-         color: var(---icon_color_1);
+         color: var(---icon_color_3);
          border: 1px solid var(---border_color);
          padding: 5px 10px;
          border-radius: 10px;
@@ -188,7 +211,7 @@
         align-items: center;
        }
        .filter_add_event .add_text{
-         color: var(---icon_color_1);
+         color: var(---text_color_1);
          border: 1px dashed var(---border_color);
          padding: 5px 10px;
          border-radius: 10px;
@@ -196,7 +219,7 @@
          margin-right: 20px;
        }
        .button_cancel{
-        color: var(---icon_color_1);
+        color: var(---text_color_1);
         cursor: pointer;
        }
        .painel_right_body{
@@ -243,7 +266,7 @@
 
        /* filters */
        .painel_right_body{
-        height: 100%;
+        height: calc(100vh - 170px);
         position: relative;
        }
      
@@ -259,6 +282,7 @@
         min-width: 260px;
         height: 590px;
         overflow-y: scroll;
+        z-index: 10;
        }
        .painel_right_filter_content {
         overflow: scroll;
@@ -352,6 +376,7 @@
           background: var(---gray_1);
           border: 1px solid var(---border_color);
           max-width: 650px;
+          z-index: 10;
         }
         .painel_filter_date_pressets {
           display: flex;
@@ -447,23 +472,80 @@
         }
         .painel_filter_date_btn_apply{
           background: var(---text_color_1);
+          color: var(---text_color_btn);
         }
         .painel_filter_date_btn_cancel{
           color: var(---text_color_2);
         }
       
         .range {
-            background-color:  var(---text_color_2);
+            background-color: var(---text_range);
             user-select: none;
         }
          .selected {
-            background-color: var(---black_1)!important;
-            color: var(---black_2);
-           /* border-top-left-radius: 10px; */
+            background-color: var(---text_select_bg)!important;
+            color: var(---text_select)!important;
+
+        }
+        .loader_base{
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          display: none;
+          place-items: center;
+          top: 170px;
+          background: var(---black_2);
+          padding-right: 6%;
+          padding-bottom: 170px;
+          z-index: 2;
+        }
+        .loader_active{
+          display: grid!important;
         }
        
+       
+         .loader_base .loader {
+          width: 50px;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          border: 8px solid var(---gray_2);
+          border-right-color: var(---icon_color_1);
+          animation: l2 1s infinite linear;
+          }
+          @keyframes l2 {to{transform: rotate(1turn)}}
+
+          .pagination_base{
+            height: 120px;
+            width: 100%;
+            display: grid;
+            place-items: center;
+          }
+          .pagination_content button{
+              background: none;
+              border: 1px solid var(---border_color);
+              border-radius: 6px;
+              color: var(---text_color_1);
+              font-size: 21px;
+              width: 48px;
+              height: 48px;
+              cursor: pointer;
+          }
+          .pagination_length{
+            font-size: 21px;
+            color: var(---text_color_1);
+            padding: 0 30px;
+          }
+          .pagination_content{
+            position: fixed;
+            bottom: 30px;
+            background: var(---black_2);
+          }
+          .page_active{
+            opacity: 1!important;
+          }
     
     </style>
+
 
 
 
@@ -495,7 +577,7 @@
     <main class="painel_body">
         <div class="painel_left">
            <div class="icones">
-            <i class="fa-solid fa-list icon_list"></i>
+            <i class="fa-solid fa-list icon_list page_active"></i>
             <i class="fa-solid fa-map-location-dot icon_map"></i>
            </div>
         </div>
@@ -729,14 +811,11 @@
                             <th>CPF/CNPJ</th>
                             <th>UF</th>
                             <th>Região</th>
-                            <th>Data do pedido criado</th>
-                            <th>Mês</th>
                             <th>Data de faturamento</th>
                             <th>SLA FAT</th>
                             <th>Operador</th>
                             <th>Transportadora</th>
                             <th>Cód. Rast.</th>
-                            <th>Comentario</th>
                             <th>SLA OP</th>
                             <th>Data coleta</th>
                             <th>Data Emissão Cte</th>
@@ -747,275 +826,20 @@
                             <th>SLA TOTAL</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>12345</td>
-                            <td>1500.00</td>
-                            <td>100.00</td>
-                            <td>6.67%</td>
-                            <td>SKU123</td>
-                            <td>Operação A</td>
-                            <td>2023-07-01</td>
-                            <td>Online</td>
-                            <td>Emitido</td>
-                            <td><i class="fa-solid fa-truck"></i> Processando</td>
-                            <td>2023-07-05</td>
-                            <td>Cliente X</td>
-                            <td>123.456.789-00</td>
-                            <td>SP</td>
-                            <td>Sul</td>
-                            <td>2023-06-28</td>
-                            <td>Julho</td>
-                            <td>2023-07-03</td>
-                            <td>2 dias</td>
-                            <td>Operador Y</td>
-                            <td>Transportadora A</td>
-                            <td>RAST123</td>
-                            <td>Entrega rápida</td>
-                            <td>1 dia</td>
-                            <td>2023-07-04</td>
-                            <td>2023-07-02</td>
-                            <td>1 dia</td>
-                            <td>2023-07-06</td>
-                            <td>Em trânsito</td>
-                            <td>3 dias</td>
-                            <td>5 dias</td>
-                        </tr>
-                        <tr>
-                            <td>12345</td>
-                            <td>1500.00</td>
-                            <td>100.00</td>
-                            <td>6.67%</td>
-                            <td>SKU123</td>
-                            <td>Operação A</td>
-                            <td>2023-07-01</td>
-                            <td>Online</td>
-                            <td>Emitido</td>
-                            <td><i class="fa-solid fa-truck"></i> Processando</td>
-                            <td>2023-07-05</td>
-                            <td>Cliente X</td>
-                            <td>123.456.789-00</td>
-                            <td>SP</td>
-                            <td>Sul</td>
-                            <td>2023-06-28</td>
-                            <td>Julho</td>
-                            <td>2023-07-03</td>
-                            <td>2 dias</td>
-                            <td>Operador Y</td>
-                            <td>Transportadora A</td>
-                            <td>RAST123</td>
-                            <td>Entrega rápida</td>
-                            <td>1 dia</td>
-                            <td>2023-07-04</td>
-                            <td>2023-07-02</td>
-                            <td>1 dia</td>
-                            <td>2023-07-06</td>
-                            <td>Em trânsito</td>
-                            <td>3 dias</td>
-                            <td>5 dias</td>
-                        </tr>
-                        <tr>
-                            <td>12345</td>
-                            <td>1500.00</td>
-                            <td>100.00</td>
-                            <td>6.67%</td>
-                            <td>SKU123</td>
-                            <td>Operação A</td>
-                            <td>2023-07-01</td>
-                            <td>Online</td>
-                            <td>Emitido</td>
-                            <td><i class="fa-solid fa-truck"></i> Processando</td>
-                            <td>2023-07-05</td>
-                            <td>Cliente X</td>
-                            <td>123.456.789-00</td>
-                            <td>SP</td>
-                            <td>Sul</td>
-                            <td>2023-06-28</td>
-                            <td>Julho</td>
-                            <td>2023-07-03</td>
-                            <td>2 dias</td>
-                            <td>Operador Y</td>
-                            <td>Transportadora A</td>
-                            <td>RAST123</td>
-                            <td>Entrega rápida</td>
-                            <td>1 dia</td>
-                            <td>2023-07-04</td>
-                            <td>2023-07-02</td>
-                            <td>1 dia</td>
-                            <td>2023-07-06</td>
-                            <td>Em trânsito</td>
-                            <td>3 dias</td>
-                            <td>5 dias</td>
-                        </tr>
-                        <tr>
-                            <td>12345</td>
-                            <td>1500.00</td>
-                            <td>100.00</td>
-                            <td>6.67%</td>
-                            <td>SKU123</td>
-                            <td>Operação A</td>
-                            <td>2023-07-01</td>
-                            <td>Online</td>
-                            <td>Emitido</td>
-                            <td><i class="fa-solid fa-truck"></i> Processando</td>
-                            <td>2023-07-05</td>
-                            <td>Cliente X</td>
-                            <td>123.456.789-00</td>
-                            <td>SP</td>
-                            <td>Sul</td>
-                            <td>2023-06-28</td>
-                            <td>Julho</td>
-                            <td>2023-07-03</td>
-                            <td>2 dias</td>
-                            <td>Operador Y</td>
-                            <td>Transportadora A</td>
-                            <td>RAST123</td>
-                            <td>Entrega rápida</td>
-                            <td>1 dia</td>
-                            <td>2023-07-04</td>
-                            <td>2023-07-02</td>
-                            <td>1 dia</td>
-                            <td>2023-07-06</td>
-                            <td>Em trânsito</td>
-                            <td>3 dias</td>
-                            <td>5 dias</td>
-                        </tr>
-                        <tr>
-                            <td>12345</td>
-                            <td>1500.00</td>
-                            <td>100.00</td>
-                            <td>6.67%</td>
-                            <td>SKU123</td>
-                            <td>Operação A</td>
-                            <td>2023-07-01</td>
-                            <td>Online</td>
-                            <td>Emitido</td>
-                            <td><i class="fa-solid fa-truck"></i> Processando</td>
-                            <td>2023-07-05</td>
-                            <td>Cliente X</td>
-                            <td>123.456.789-00</td>
-                            <td>SP</td>
-                            <td>Sul</td>
-                            <td>2023-06-28</td>
-                            <td>Julho</td>
-                            <td>2023-07-03</td>
-                            <td>2 dias</td>
-                            <td>Operador Y</td>
-                            <td>Transportadora A</td>
-                            <td>RAST123</td>
-                            <td>Entrega rápida</td>
-                            <td>1 dia</td>
-                            <td>2023-07-04</td>
-                            <td>2023-07-02</td>
-                            <td>1 dia</td>
-                            <td>2023-07-06</td>
-                            <td>Em trânsito</td>
-                            <td>3 dias</td>
-                            <td>5 dias</td>
-                        </tr>
-                        <tr>
-                            <td>12345</td>
-                            <td>1500.00</td>
-                            <td>100.00</td>
-                            <td>6.67%</td>
-                            <td>SKU123</td>
-                            <td>Operação A</td>
-                            <td>2023-07-01</td>
-                            <td>Online</td>
-                            <td>Emitido</td>
-                            <td><i class="fa-solid fa-truck"></i> Processando</td>
-                            <td>2023-07-05</td>
-                            <td>Cliente X</td>
-                            <td>123.456.789-00</td>
-                            <td>SP</td>
-                            <td>Sul</td>
-                            <td>2023-06-28</td>
-                            <td>Julho</td>
-                            <td>2023-07-03</td>
-                            <td>2 dias</td>
-                            <td>Operador Y</td>
-                            <td>Transportadora A</td>
-                            <td>RAST123</td>
-                            <td>Entrega rápida</td>
-                            <td>1 dia</td>
-                            <td>2023-07-04</td>
-                            <td>2023-07-02</td>
-                            <td>1 dia</td>
-                            <td>2023-07-06</td>
-                            <td>Em trânsito</td>
-                            <td>3 dias</td>
-                            <td>5 dias</td>
-                        </tr>
-                        <tr>
-                            <td>12345</td>
-                            <td>1500.00</td>
-                            <td>100.00</td>
-                            <td>6.67%</td>
-                            <td>SKU123</td>
-                            <td>Operação A</td>
-                            <td>2023-07-01</td>
-                            <td>Online</td>
-                            <td>Emitido</td>
-                            <td><i class="fa-solid fa-truck"></i> Processando</td>
-                            <td>2023-07-05</td>
-                            <td>Cliente X</td>
-                            <td>123.456.789-00</td>
-                            <td>SP</td>
-                            <td>Sul</td>
-                            <td>2023-06-28</td>
-                            <td>Julho</td>
-                            <td>2023-07-03</td>
-                            <td>2 dias</td>
-                            <td>Operador Y</td>
-                            <td>Transportadora A</td>
-                            <td>RAST123</td>
-                            <td>Entrega rápida</td>
-                            <td>1 dia</td>
-                            <td>2023-07-04</td>
-                            <td>2023-07-02</td>
-                            <td>1 dia</td>
-                            <td>2023-07-06</td>
-                            <td>Em trânsito</td>
-                            <td>3 dias</td>
-                            <td>5 dias</td>
-                        </tr>
-                        <tr>
-                            <td>12345</td>
-                            <td>1500.00</td>
-                            <td>100.00</td>
-                            <td>6.67%</td>
-                            <td>SKU123</td>
-                            <td>Operação A</td>
-                            <td>2023-07-01</td>
-                            <td>Online</td>
-                            <td>Emitido</td>
-                            <td><i class="fa-solid fa-truck"></i> Processando</td>
-                            <td>2023-07-05</td>
-                            <td>Cliente X</td>
-                            <td>123.456.789-00</td>
-                            <td>SP</td>
-                            <td>Sul</td>
-                            <td>2023-06-28</td>
-                            <td>Julho</td>
-                            <td>2023-07-03</td>
-                            <td>2 dias</td>
-                            <td>Operador Y</td>
-                            <td>Transportadora A</td>
-                            <td>RAST123</td>
-                            <td>Entrega rápida</td>
-                            <td>1 dia</td>
-                            <td>2023-07-04</td>
-                            <td>2023-07-02</td>
-                            <td>1 dia</td>
-                            <td>2023-07-06</td>
-                            <td>Em trânsito</td>
-                            <td>3 dias</td>
-                            <td>5 dias</td>
-                        </tr>
+                    <tbody>                         
                     </tbody>
+                    <div class="loader_base loader_active"><div class="loader"></div></div>
                 </table>
-               
-            </div>
+
+                <div class="pagination_base">
+                  <div class="pagination_content">
+                    <button class="pagination_preview">&larr;</button>
+                    <span class="pagination_length">1</span>
+                    <button class="pagination_next">&rarr;</button>
+                  </div>
+                </div>
+                
+              </div>
         </div>
     </main>
   </div>
@@ -1217,21 +1041,26 @@
           updateCalendar();
         });
 
-        function sendData(){
+        function sendData(page, limit){
           var startDate = filterDate(selectedStartDate)
           var endDate = filterDate(selectedEndDate)
           var invoiceStatusValue = document.querySelector('.filter_result_value').innerHTML
           var operatorValue = document.querySelector('.filter_result_operator_value').innerHTML
           var shippingCompanyValue = document.querySelector('.filter_result_shipping_value').innerHTML
-          getDatas(setDataApi(startDate, endDate, invoiceStatusValue, operatorValue, shippingCompanyValue))
+          getDatas(setDataApi(startDate, endDate, invoiceStatusValue, operatorValue, shippingCompanyValue, page, limit))
         }
 
-       // sendData()
+        const refreshData = document.querySelector('.fa-arrows-rotate')
+         refreshData.addEventListener('click', () => {
+            sessionStorage.clear()
+            sendData(1, 100)
+          });
 
         applyButton.addEventListener('click', () => {
           painel_filter_date.classList.add('hide_painel')
           painel_filter.classList.remove('hide_painel')
-          sendData()
+          sessionStorage.clear()
+          sendData(1, 100)
         });
         
           function inputNotChecked(inputs) {
@@ -1249,7 +1078,8 @@
                 if (type == "shipping_company") {
                   document.querySelector('.filter_result_shipping_value').innerHTML = name
                 }
-                sendData()
+                sessionStorage.clear()
+                sendData(1, 100)
                 inputs.forEach((otherRadio) => {
                   if (otherRadio !== e.target) {
                     otherRadio.checked = false;
@@ -1260,13 +1090,15 @@
           }
        
 
-        function setDataApi(startDate, endDate, invoiceStatusValue, operatorValue, shippingCompanyValue){
+        function setDataApi(startDate, endDate, invoiceStatusValue, operatorValue, shippingCompanyValue, page,limit){
            return {
             startDate: startDate,
             endDate: endDate,
             invoiceStatusValue: statusType[invoiceStatusValue],
             operatorValue: operatorValue == "Todos" ? null : operatorValue,
-            shippingCompanyValue: shippingCompanyValue == "Todas" ? null : shippingCompanyValue
+            shippingCompanyValue: shippingCompanyValue == "Todas" ? null : shippingCompanyValue,
+            limit: limit,
+            page: page
           }
         }
 
@@ -1288,6 +1120,7 @@
         presetButtons.forEach(button => {
           button.addEventListener('click', () => {
             const preset = button.getAttribute('data-preset');
+            
             applyPreset(preset);
           });
         });
@@ -1336,7 +1169,7 @@
         }
 
         updateCalendar();
-        sendData() // init data
+        sendData(1, 100) // init data
 
         document.addEventListener('DOMContentLoaded', (event) => {
             
@@ -1372,26 +1205,192 @@
             });
           });
 
-      async function getDatas(data){
-        console.log(data)
-        try {
-            const response = await fetch(`http://localhost:3000/api`,{
-              method:"POST",
-              headers:{
-                'Content-Type':'application/json'
-              },
-              body: JSON.stringify(data)
-            })
-            if(response.status ==200){
-              const result = await response.json()
-              console.log(result)
-            }
-            
-        } catch (error) {
-          console.log(error)
+     const loader_base = document.querySelector('.loader_base')
+     
+      const maxPages = 20;
+      let currentPage = 1;
+      let totalItems = 0;
+    
+     async function getDatas(data){
+        const cachedData = sessionStorage.getItem(`page_${data.page}`);
+        if(cachedData){
+          document.querySelector('.loader_base').classList.add('loader_active')
+          var result = JSON.parse(cachedData)
+          renderData(result)
+          loaderActive()
+         document.querySelector('.loader_base').classList.remove('loader_active')
+        }else{
+          try {
+              document.querySelector('.loader_base').classList.add('loader_active')
+              const response = await fetch(`http://localhost:3000/api`,{
+                method:"POST",
+                headers:{
+                  'Content-Type':'application/json'
+                },
+                body: JSON.stringify(data)
+              })
+              if(response.status ==200){
+                const result = await response.json()
+                storeDataInLocalStorage(data.page, result);
+                renderData(result)
+                loaderActive()
+               document.querySelector('.loader_base').classList.remove('loader_active')
+              }
+              
+          } catch (error) {
+            console.log(error)
+          }
+          
         }
       }
 
+       function storeDataInLocalStorage(page, data) {
+          sessionStorage.setItem(`page_${page}`, JSON.stringify(data));
+          console.log('error')
+          manageLocalStorage(`page_${page}`);
+        }
+
+        function manageLocalStorage(currentPage) {
+          const keys = Object.keys(sessionStorage).filter(key => key.startsWith('page_'));
+          const newData = keys.filter(e=> e !== currentPage)
+          if (keys.length  > maxPages) {
+           keys.sort((a, b) => parseInt(a.split('_')[1]) - parseInt(b.split('_')[1]));
+           keys.slice(0, keys.length - maxPages).forEach(key => sessionStorage.removeItem(key));
+          }
+        }
+      
+
+      function loaderActive(){
+        const loader_base = document.querySelector('.loader_base')
+        if(loader_base.classList.contains('loader_active')){
+          document.body.style.overflow = 'hidden'
+        }else{
+          document.body.style.overflow = 'auto'
+        }
+      }
+      loaderActive()
+     
+       var statusTypeInvoice = {
+          "1":"Pendente",
+          "2": "Cancelada",
+          "3": "Aguardando recibo",
+          "4": "Rejeitada",
+          "5": "Autorizada",
+          "6": "Emitida DANFE",
+          "7": "Registrada",
+          "8": "Aguardando protocolo",
+          "9": "Denegada",
+          "10": "Consulta situação",
+          "11": "Bloqueada",
+        }
+     
+      function renderData(data){
+        const tableBody = document.querySelector('.painel_right_content_header tbody');
+        if(data.length > 0){
+          tableBody.innerHTML = ''
+        }
+        data.forEach((item)=>{
+          
+          const row = document.createElement('tr')
+          const properties = [
+              item?.invoice?.numero, // Número NFe
+              item?.operator?.valorNfFormatted, // Valor de NFe
+              "null", // Custo de frete
+              "null", // % frete
+              "null", // SKU
+              "null", // naturezas de operação
+              item?.operator?.dtCadastroFormatted, // Data da entrada no operador
+              "vandemmia", // Canal
+              "null",//statusTypeInvoice[item?.invoice?.situacao], // Status NFe
+              item?.operator?.statusNf, // Status operadora
+              item?.operator?.updatedAtFormatted, // Data expedição
+              item?.invoice?.contato.nome, // Nome do cliente
+              item?.invoice?.contato.numeroDocumento, // CPF/CNPJ
+              item?.invoice?.contato?.endereco.uf, // UF
+              item?.invoice?.contato?.endereco.municipio, // Região
+              item?.invoice?.dataEmissao, // Data de faturamento
+              "null", // SLA FAT
+              "vandemmia", // Operador
+              item?.operator?.nomeTransportadora, // Transportadora
+              "null", // Cód. Rast.
+              "null", // SLA OP
+              item?.operator?.updatedAtFormatted, // Data coleta 
+              "null", // Data Emissão Cte
+              "null", // SLA CTE
+              item?.invoice?.dataEmissao, // Data ultima atualização
+              item?.operator?.statusNf, // Status transportadora
+              "null", // SLA ENT
+              "null", // SLA TOTAL
+          ]
+
+           properties.forEach(property => {
+            const cell = document.createElement('td');
+            cell.textContent = property;
+            row.appendChild(cell);
+          });
+          tableBody.appendChild(row);
+          
+        })
+
+        if(data.length >= 100){
+         document.querySelector('.pagination_next').style.display="inline-block"
+          document.querySelector('.pagination_base').style.display = "grid"
+        }else{
+          document.querySelector('.pagination_next').style.display = "none"
+           document.querySelector('.pagination_base').style.display = "none"
+        }
+
+        if(Number(document.querySelector('.pagination_length').innerHTML) > 1) {
+          document.querySelector('.pagination_preview').style.display = "inline-block"
+          
+        } else {
+          document.querySelector('.pagination_preview').style.display = "none"
+         
+        }
+        
+      }
+
+      pagination()
+      var counter = 1
+      function pagination(){
+        const pagination_next = document.querySelector('.pagination_next')
+        const pagination_preview = document.querySelector('.pagination_preview')
+        const pagination_length = document.querySelector('.pagination_length')
+        pagination_next.addEventListener('click', () => {
+          counter++
+          pagination_length.innerHTML = counter
+          sendData(counter, 100)
+
+        })
+        pagination_preview.addEventListener('click', () => {
+          counter--
+          if (counter > 0) {
+            pagination_length.innerHTML = counter
+            sendData(counter, 100)
+          }
+        })
+      }
+
+      dackMode()
+      function dackMode(){
+        const btn = document.querySelector('.fa-circle-half-stroke')
+        console.log(btn)
+        btn.addEventListener('click',(e)=>{
+          document.body.classList.toggle('darktheme')
+        })
+      }
+
+   const bar_search = document.querySelector('.bar_search input');
+    bar_search.addEventListener('focus', (e) => {
+      bar_search.style.paddingLeft = '15px';
+      const parent = e.target.parentNode.parentNode
+      const icon = parent.querySelector('.icon')
+      icon.style.right ="0"
+      icon.style.pointerEvents= "painted";
+    });
+
+
+      
      
   </script>
 </body>

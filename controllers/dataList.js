@@ -4,7 +4,9 @@ const vandemmia_token = require('./vandemmiaToken')
 async function invoices(data, token) {
     const { page, limit, orderId, status, type, dateStart, dateEnd } = data;
     try {
-        const response = await axios.get(`https://www.bling.com.br/Api/v3/nfe?pagina=${page}&limite=${limit}${orderId ? `&numeroLoja=${orderId}` : ''}&situacao=${status}&tipo=${type}&dataEmissaoInicial=${dateStart}&dataEmissaoFinal=${dateEnd}`, {
+        const link = `https://www.bling.com.br/Api/v3/nfe?pagina=${page}&limite=${limit}${orderId ? `&numeroLoja=${orderId}` : ''}&situacao=${status}&tipo=${type}&dataEmissaoInicial=${dateStart}&dataEmissaoFinal=${dateEnd}`
+        console.log(link)
+        const response = await axios.get(link, {
             headers: {
                 "Authorization": `Bearer ${token.token}`
             }
@@ -136,13 +138,13 @@ module.exports = {
             }
 
             const data = {
-                page: 1,
-                limit: 100,
+                page: data_body.page,
+                limit: data_body.limit,
                 orderId: undefined,
                 status: data_body.invoiceStatusValue,
                 type: 1,
                 dateStart: setDateStart(data_body.startDate.year, data_body.startDate.month, data_body.startDate.day),
-                dateEnd: setDateEnd(data_body.endDate.year, data_body.endDate.month, data_body.endDate.day)
+                dateEnd: setDateEnd(data_body.endDate.year, data_body.endDate.month, data_body.endDate.day),
             };
             console.log(data_body)
 
