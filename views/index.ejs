@@ -17,6 +17,9 @@
         }
         :root{
             ---black_1:#020202;
+            ---border_modal:#181818;
+             ---modal_bg:#020202ea;
+             --text_modal_header:#727272;
             ---black_2:#121212;
             ---black_header:#121212;
             ---gray_1:#222222;
@@ -34,6 +37,9 @@
             ---text_color_btn:#000000;
         }
         .darktheme {
+          ---modal_bg:#141414ea;
+          ---border_modal:#e9e9e9;
+          --text_modal_header:#303030;
           ---text_color_btn:#ffffff;
            ---text_select_bg:#000000;
             ---text_range:#ffffff;
@@ -263,6 +269,21 @@
         margin-right: 5px;
         color: rgb(34, 143, 34);
        }
+       .nf_number i{
+        font-size: 13px;
+        margin-left: 5px;
+        color: rgb(34, 143, 34);
+        border-radius: 100%;
+        border: 1px solid rgb(34, 143, 34);
+        height: 20px;
+        width: 20px;
+        display: inline-grid;
+        place-items: center;
+        pointer-events: none;
+       }
+       .nf_number {
+        cursor: pointer;
+       }
 
        /* filters */
        .painel_right_body{
@@ -286,8 +307,8 @@
        }
        .painel_right_filter_content {
         overflow: scroll;
-        -ms-overflow-style: none;  /* Para Internet Explorer e Edge */
-        scrollbar-width: none;  /* Para Firefox */
+        -ms-overflow-style: none; 
+        scrollbar-width: none;  
       }
 
       .painel_right_filter_content::-webkit-scrollbar {
@@ -514,6 +535,23 @@
           }
           @keyframes l2 {to{transform: rotate(1turn)}}
 
+          .loader_base_modal{
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+          }
+
+          .loader_base_modal .loader {
+          width: 50px;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          border: 8px solid var(---gray_2);
+          border-right-color: var(---icon_color_1);
+          animation: l2 1s infinite linear;
+          }
+          @keyframes l2 {to{transform: rotate(1turn)}}
+
           .pagination_base{
             height: 120px;
             width: 100%;
@@ -543,17 +581,94 @@
           .page_active{
             opacity: 1!important;
           }
+      .modal{
+        width: 100%;
+        height: 100vh;
+        background-color: var(---modal_bg);
+        position: fixed;
+        z-index: 1000000;
+        display: none;
+      } 
+      .show_modal{
+        display: block!important;
+      }
+      .modal_content{
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+      } 
+      .modal_card{
+        height: 80%;
+        width: 50%;
+        min-height: 500px;
+        min-width: 500px;
+        background: var(---black_2);
+        border-radius: 10px;
+        border: 1px solid var(---border_color);
+        padding: 30px 30px 0 30px;
+       
+      }  
+
+      .modal_body{
+        overflow: scroll;
+         -ms-overflow-style: none; 
+        scrollbar-width: none;
+        height: 94%;
+        width: 100%;
+      }
+      .modal_body_data{
+        height: 100%;
+      }
+      .modal_header{
+        display: flex;
+        justify-content: space-between;
+        height: 6%;
+      }
+      .modal_header p{
+        font-size: 15px;
+        color: #727272;
+        user-select: none;
+      }
+      .modal_header .icon i{
+        font-size: 21px;
+        color: #727272;
+        cursor: pointer;
+      }
+      .modal_body_data_row{
+         display: flex;
+         width: 100%;
+         justify-content: space-between;
+         padding: 10px 0;
+         border-bottom: 1px solid var(---border_modal);
+        }
+        .modal_body_data_row span{
+          color: var(---text_color_2);
+        }
     
     </style>
-
-
-
-
-
-
 </head>
 <body>
   <div class="painel_base">
+    <div class="modal">
+      <div class="modal_content">
+        <div class="modal_card">
+          <div class="modal_header">
+            <p>Informações adicionais</p>
+            <div class="icon">
+              <i class="fa-solid fa-circle-xmark"></i>
+            </div>
+          </div>
+          <div class="modal_body">
+            <div class="modal_body_data">
+              <div class="loader_base_modal loader_modal_active">
+                <div class="loader">&nbsp;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <header class="painel_header">
         <div class="logo">
             <h1>Logística</h1>
@@ -697,8 +812,8 @@
                           <label for="vapt">VAPT</label>
                         </div>
                         <div class="filter_operator_input">
-                          <input type="radio" id="vandemmia" name="Vandemmia" data-type="operador">
-                          <label for="vandemmia">Vandemmia</label>
+                          <input type="radio" id="vendemmia" name="Vendemmia" data-type="operador">
+                          <label for="vendemmia">Vendemmia</label>
                         </div>
                       </form>
                     </div>
@@ -1289,48 +1404,42 @@
         if(data.length > 0){
           tableBody.innerHTML = ''
         }
+        var template =''
         data.forEach((item)=>{
-          
-          const row = document.createElement('tr')
-          const properties = [
-              item?.invoice?.numero, // Número NFe
-              item?.operator?.valorNfFormatted, // Valor de NFe
-              "null", // Custo de frete
-              "null", // % frete
-              "null", // SKU
-              "null", // naturezas de operação
-              item?.operator?.dtCadastroFormatted, // Data da entrada no operador
-              "vandemmia", // Canal
-              "null",//statusTypeInvoice[item?.invoice?.situacao], // Status NFe
-              item?.operator?.statusNf, // Status operadora
-              item?.operator?.updatedAtFormatted, // Data expedição
-              item?.invoice?.contato.nome, // Nome do cliente
-              item?.invoice?.contato.numeroDocumento, // CPF/CNPJ
-              item?.invoice?.contato?.endereco.uf, // UF
-              item?.invoice?.contato?.endereco.municipio, // Região
-              item?.invoice?.dataEmissao, // Data de faturamento
-              "null", // SLA FAT
-              "vandemmia", // Operador
-              item?.operator?.nomeTransportadora, // Transportadora
-              "null", // Cód. Rast.
-              "null", // SLA OP
-              item?.operator?.updatedAtFormatted, // Data coleta 
-              "null", // Data Emissão Cte
-              "null", // SLA CTE
-              item?.invoice?.dataEmissao, // Data ultima atualização
-              item?.operator?.statusNf, // Status transportadora
-              "null", // SLA ENT
-              "null", // SLA TOTAL
-          ]
-
-           properties.forEach(property => {
-            const cell = document.createElement('td');
-            cell.textContent = property;
-            row.appendChild(cell);
-          });
-          tableBody.appendChild(row);
-          
+          template +=`
+           <tr>
+             <td class="nf_number" data-id="${item?.invoice?.id}">${item?.invoice?.numero} <i class="fa-solid fa-plus"></i></td>
+             <td>${item?.operator?.valorNfFormatted ?? 'null'}</td>
+             <td>null</td>
+             <td>null</td>
+             <td>null</td>
+             <td>null</td>
+             <td>${item?.operator?.dtCadastroFormatted ?? item?.invoice?.dataEmissao}</td>
+             <td>${item?.operator_name}</td>
+             <td>null</td>
+             <td>${item?.operator?.statusNf}</td>
+             <td>${item?.operator?.updatedAtFormatted}</td>
+             <td>${item?.invoice?.contato.nome}</td>
+             <td>${item?.invoice?.contato.numeroDocumento}</td>
+             <td>${item?.invoice?.contato?.endereco.uf}</td>
+             <td>${item?.invoice?.contato?.endereco.municipio}</td>
+             <td>${item?.invoice?.dataEmissao}</td>
+             <td>null</td>
+             <td>${item?.operator_name}</td>
+             <td><i class="fa-solid fa-truck"></i> ${item?.operator?.nomeTransportadora ?? item?.shipping_company}</td>
+             <td>null</td>
+             <td>null</td>
+             <td>${item?.operator?.updatedAtFormatted}</td>
+             <td>null</td>
+             <td>null</td>
+             <td>${item?.invoice?.dataEmissao}</td>
+             <td>${item?.operator?.statusNf}</td>
+             <td>null</td>
+             <td>null</td>
+            </tr>
+          `
         })
+        tableBody.innerHTML = template
 
         if(data.length >= 100){
          document.querySelector('.pagination_next').style.display="inline-block"
@@ -1347,7 +1456,30 @@
           document.querySelector('.pagination_preview').style.display = "none"
          
         }
-        
+        showDataNF()
+      }
+
+      async function getInvoice(id){
+        const response = await fetch(`https://dashboard-logistica-three.vercel.app/invoice/${id}`)
+        if(response.status ==200){
+          const result = await response.json()
+          return result
+        }
+      }
+      const modal_body_data = document.querySelector('.modal_body_data')
+      const modal = document.querySelector('.modal')
+
+      function showDataNF(){
+        const btns = document.querySelectorAll('.nf_number')
+        btns.forEach((e)=>{
+          e.addEventListener('click', async(btn)=>{
+            modal.classList.add('show_modal')
+            var id = btn.target.dataset.id 
+            const invoice = await getInvoice(id)
+            dataForModal(invoice)
+            console.log(invoice)
+          })
+        })
       }
 
       pagination()
@@ -1388,6 +1520,137 @@
       icon.style.right ="0"
       icon.style.pointerEvents= "painted";
     });
+
+    const closeModal = document.querySelector('.modal_header .icon i')
+   
+    closeModal.addEventListener('click',()=>{
+       modal_body_data.innerHTML = `
+        <div class="loader_base_modal loader_modal_active">
+          <div class="loader">&nbsp;</div>
+        </div>
+        `
+      modal.classList.remove('show_modal')
+    })
+
+    function dataForModal(data){
+     
+     
+      var template = `
+        <div class="modal_body_data_row">
+          <span>${data.numero}</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Valor de NFe</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Custo de frete</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>% frete</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>SKU</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Natureza OP</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Data da entrada no operador</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Canal</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Status NFe</span>
+          <span>${statusTypeInvoice[data?.situacao]}</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Status operadora</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Data expedição</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Nome do cliente</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>CPF/CNPJ</span>
+          <span>CPF/CNPJ</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>UF</span>
+          <span>UF</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Região</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Data de faturamento</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>SLA FAT</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Operador</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Transportadora</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Cód. Rast.</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>SLA OP</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Data coleta</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Data Emissão Cte</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>SLA CTE</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Data ultima atualização</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>Status transportadora</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>SLA ENT</span>
+          <span>12325</span>
+        </div>
+         <div class="modal_body_data_row">
+          <span>SLA TOTAL</span>
+          <span>12325</span>
+        </div>
+      `
+     modal_body_data.innerHTML = template
+    }
 
 
       
