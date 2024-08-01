@@ -959,7 +959,9 @@
     </main>
   </div>
   <script>
-
+    //https://dashboard-logistica-three.vercel.app
+    //http://localhost:3000
+    var api_url ="http://localhost:3000"
     const input_status = document.querySelectorAll('.filter_status_input input');
     const input_operator = document.querySelectorAll('.filter_operator_input input');
     const input_shipping_company = document.querySelectorAll('.filter_shipping_company_input input');
@@ -1337,7 +1339,7 @@
         }else{
           try {
               document.querySelector('.loader_base').classList.add('loader_active')
-              const response = await fetch(`https://dashboard-logistica-three.vercel.app/api`,{
+              const response = await fetch(`${api_url}/api`,{
                 method:"POST",
                 headers:{
                   'Content-Type':'application/json'
@@ -1384,7 +1386,36 @@
         }
       }
       loaderActive()
-     
+      var regions = {
+          "SP": "Sudeste",
+          "RJ": "Sudeste",
+          "MG": "Sudeste",
+          "ES": "Sudeste",
+          "RS": "Sul",
+          "SC": "Sul",
+          "PR": "Sul",
+          "BA": "Nordeste",
+          "PE": "Nordeste",
+          "CE": "Nordeste",
+          "RN": "Nordeste",
+          "PB": "Nordeste",
+          "AL": "Nordeste",
+          "SE": "Nordeste",
+          "PI": "Nordeste",
+          "MA": "Nordeste",
+          "PA": "Norte",
+          "AM": "Norte",
+          "RR": "Norte",
+          "AP": "Norte",
+          "TO": "Norte",
+          "RO": "Norte",
+          "AC": "Norte",
+          "DF": "Centro-Oeste",
+          "GO": "Centro-Oeste",
+          "MT": "Centro-Oeste",
+          "MS": "Centro-Oeste"
+        };
+
        var statusTypeInvoice = {
           "1":"Pendente",
           "2": "Cancelada",
@@ -1398,8 +1429,23 @@
           "10": "Consulta situação",
           "11": "Bloqueada",
         }
+        
+          function filterDoc(value) {
+            let result = value
+            let number = value.replace(/\D/g, '');
+            if (number.length <= 11) {
+              number = number.substring(0, 3) + '.' + number.substring(3, 6) + '.' + number.substring(6, 9) + '-' + number.substring(9, 11);
+              result = number
+            } else {
+              number = number.substring(0, 2) + '.' + number.substring(2, 5) + '.' + number.substring(5, 8) + '/' + number.substring(8, 12) + '-' + number.substring(12, 14);
+              result = number
+            }
+
+            return result
+          }
      
       function renderData(data){
+        console.log(data)
         const tableBody = document.querySelector('.painel_right_content_header tbody');
         if(data.length > 0){
           tableBody.innerHTML = ''
@@ -1414,25 +1460,25 @@
              <td>null</td>
              <td>null</td>
              <td>null</td>
-             <td>${item?.operator?.dtCadastroFormatted ?? item?.invoice?.dataEmissao}</td>
-             <td>${item?.operator_name}</td>
-             <td>null</td>
+             <td>${item?.operator?.dtCadastroFormatted ? formatDate(new Date(item?.operator?.dtCadastroFormatted)) : formatDate(new Date(item?.invoice?.dataEmissao))}</td>
+             <td>${item?.canal}</td>
+             <td>${item?.situacao}</td>
              <td>${item?.operator?.statusNf}</td>
-             <td>${item?.operator?.updatedAtFormatted}</td>
+             <td>${formatDate(new Date(item?.operator?.updatedAtFormatted))}</td>
              <td>${item?.invoice?.contato.nome}</td>
-             <td>${item?.invoice?.contato.numeroDocumento}</td>
+             <td>${filterDoc(item?.invoice?.contato.numeroDocumento)}</td>
              <td>${item?.invoice?.contato?.endereco.uf}</td>
-             <td>${item?.invoice?.contato?.endereco.municipio}</td>
-             <td>${item?.invoice?.dataEmissao}</td>
+             <td>${item?.region}</td>
+             <td>${formatDate(new Date(item?.invoice?.dataEmissao))}</td>
              <td>null</td>
              <td>${item?.operator_name}</td>
              <td><i class="fa-solid fa-truck"></i> ${item?.operator?.nomeTransportadora ?? item?.shipping_company}</td>
              <td>null</td>
              <td>null</td>
-             <td>${item?.operator?.updatedAtFormatted}</td>
+             <td>${formatDate(new Date(item?.operator?.updatedAtFormatted))}</td>
              <td>null</td>
              <td>null</td>
-             <td>${item?.invoice?.dataEmissao}</td>
+             <td>${formatDate(new Date(item?.invoice?.dataEmissao))}</td>
              <td>${item?.operator?.statusNf}</td>
              <td>null</td>
              <td>null</td>
@@ -1458,9 +1504,9 @@
         }
         showDataNF()
       }
-
+     
       async function getInvoice(id){
-        const response = await fetch(`https://dashboard-logistica-three.vercel.app/invoice/${id}`)
+        const response = await fetch(`${api_url}/invoice/${id}`)
         if(response.status ==200){
           const result = await response.json()
           return result
@@ -1537,116 +1583,116 @@
      
       var template = `
         <div class="modal_body_data_row">
-          <span>${data.numero}</span>
-          <span>12325</span>
+          <span>Número NFe</span>
+          <span>${data.invoice.numero}</span>
         </div>
          <div class="modal_body_data_row">
           <span>Valor de NFe</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Custo de frete</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>% frete</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>SKU</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Natureza OP</span>
-          <span>12325</span>
+          <span>${data.natureza.descricao}</span>
         </div>
          <div class="modal_body_data_row">
           <span>Data da entrada no operador</span>
-          <span>12325</span>
+          <span>${formatDate(new Date(data.invoice.dataOperacao))}</span>
         </div>
          <div class="modal_body_data_row">
           <span>Canal</span>
-          <span>12325</span>
+          <span>${data.canal}</span>
         </div>
          <div class="modal_body_data_row">
           <span>Status NFe</span>
-          <span>${statusTypeInvoice[data?.situacao]}</span>
+          <span>${data.situacao}</span>
         </div>
          <div class="modal_body_data_row">
           <span>Status operadora</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Data expedição</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Nome do cliente</span>
-          <span>12325</span>
+          <span>${data.invoice.contato.nome}</span>
         </div>
          <div class="modal_body_data_row">
           <span>CPF/CNPJ</span>
-          <span>CPF/CNPJ</span>
+          <span>${data.invoice.transporte.transportador.numeroDocumento}</span>
         </div>
          <div class="modal_body_data_row">
           <span>UF</span>
-          <span>UF</span>
+          <span>${data.invoice.contato.endereco.uf}</span>
         </div>
          <div class="modal_body_data_row">
           <span>Região</span>
-          <span>12325</span>
+          <span>${data.region}</span>
         </div>
          <div class="modal_body_data_row">
           <span>Data de faturamento</span>
-          <span>12325</span>
+          <span>${formatDate(new Date(data.invoice.dataEmissao))}</span>
         </div>
          <div class="modal_body_data_row">
           <span>SLA FAT</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Operador</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Transportadora</span>
-          <span>12325</span>
+          <span>${data.shipping_company}</span>
         </div>
          <div class="modal_body_data_row">
           <span>Cód. Rast.</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>SLA OP</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Data coleta</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Data Emissão Cte</span>
-          <span>12325</span>
+          <span>${formatDate(new Date(data.invoice.dataEmissao))}</span>
         </div>
          <div class="modal_body_data_row">
           <span>SLA CTE</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Data ultima atualização</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>Status transportadora</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>SLA ENT</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
          <div class="modal_body_data_row">
           <span>SLA TOTAL</span>
-          <span>12325</span>
+          <span>null</span>
         </div>
       `
      modal_body_data.innerHTML = template

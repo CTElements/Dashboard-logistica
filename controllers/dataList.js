@@ -31,6 +31,8 @@ async function invoice(id, token) {
     }
 }
 
+
+
 function setDate(getYear, month, dayOfMonth) {
      
     return `${Number(getYear)}-${month}-${dayOfMonth}`;
@@ -113,9 +115,11 @@ async function notaVandemmia(token, data) {
     }
 }
 
-async function shippingCompany(dataList){
-    var shippingCompanyName = dataList.operator?.nomeTransportadora
-    switch (dataList.operator && dataList.operator?.nomeTransportadora) {
+
+async function shippingCompany(dataList, vandemmia){
+    if (!vandemmia) return dataList.shipping_company = 'VAPT';
+   
+    switch (vandemmia && dataList.operator?.nomeTransportadora) {
         case 'MOVVI LOGISTICA LTDA':
           
             dataList.shipping_company = 'Movvi';
@@ -148,7 +152,7 @@ async function shippingCompany(dataList){
             dataList.shipping_company = 'Valdelir Frederico';
             break;
     default:
-            dataList.shipping_company = 'VAPT';
+            dataList.shipping_company = dataList.operator?.nomeTransportadora;
         break;
   }
 }
@@ -160,6 +164,77 @@ const operatorFilter = {
     "Vendemmia":1,
     "VAPT":2
 }
+var regions = {
+    "SP": "Sudeste",
+    "RJ": "Sudeste",
+    "MG": "Sudeste",
+    "ES": "Sudeste",
+    "RS": "Sul",
+    "SC": "Sul",
+    "PR": "Sul",
+    "BA": "Nordeste",
+    "PE": "Nordeste",
+    "CE": "Nordeste",
+    "RN": "Nordeste",
+    "PB": "Nordeste",
+    "AL": "Nordeste",
+    "SE": "Nordeste",
+    "PI": "Nordeste",
+    "MA": "Nordeste",
+    "PA": "Norte",
+    "AM": "Norte",
+    "RR": "Norte",
+    "AP": "Norte",
+    "TO": "Norte",
+    "RO": "Norte",
+    "AC": "Norte",
+    "DF": "Centro-Oeste",
+    "GO": "Centro-Oeste",
+    "MT": "Centro-Oeste",
+    "MS": "Centro-Oeste"
+};
+var statusTypeInvoice = {
+    "1": "Pendente",
+    "2": "Cancelada",
+    "3": "Aguardando recibo",
+    "4": "Rejeitada",
+    "5": "Autorizada",
+    "6": "Emitida DANFE",
+    "7": "Registrada",
+    "8": "Aguardando protocolo",
+    "9": "Denegada",
+    "10": "Consulta situação",
+    "11": "Bloqueada",
+}
+
+var canal={
+    "0":"Nenhuma",
+    "204332822": "Mercado Livre",
+    "204365610": "Amazon",
+    "204373003": "Americanas",
+    "204313141": "B2B2C",
+    "204315148": "B2C-CORP.",
+    "204322956": "Bonificação (Outros)",
+    "204332812": "E-commerce",
+    "204318533": "Elements Shopify",
+    "203901744": "Elements Tray",
+    "204310486": "Garantia",
+    "204370924": "Kabum",
+    "204370925": "Leroy Merlim",
+    "204370928": "MadeiraMadeira",
+    "204370918": "Magazine Luiza",
+    "204370929": "Olist",
+    "204337940": "Open BOX (DEV 7 DIAS)",
+    "204311925": "Parceiros",
+    "204337947": "Peças de reposição",
+    "204310575": "Venda Interna",
+    "204051989": "Vendas B2B (Itajai)",
+    "204346781": "Vendas Palhoça",
+    "204496694": "Vendas São Paulo",
+    "204370932": "Via Varejo",
+    "204359790": "Westwing",
+}
+
 
 module.exports = {
     async dataList(req, res) {
@@ -183,25 +258,12 @@ module.exports = {
                 shippingCompanyValue: data_body.shippingCompanyValue
             };
 
-            var statusTypeInvoice = {
-                "1": "Pendente",
-                "2": "Cancelada",
-                "3": "Aguardando recibo",
-                "4": "Rejeitada",
-                "5": "Autorizada",
-                "6": "Emitida DANFE",
-                "7": "Registrada",
-                "8": "Aguardando protocolo",
-                "9": "Denegada",
-                "10": "Consulta situação",
-                "11": "Bloqueada",
-            }
-
             const invoiceBling = await invoices(data, tokenBling);
             if (invoiceBling.error) {
                 return res.status(500).json({ error: 'Failed to fetch invoices' });
             }
-   
+            console.log(tokenBling)
+
             const vandemmia_data = await notaVandemmia(tokenVandemmia, data);
             //const vapt_data = await vaptData()
             //const vaptDateStart = data_body.startDate.year + "-" + data_body.startDate.month + "-" + data_body.startDate.day +"T00:00:00"
@@ -215,14 +277,16 @@ module.exports = {
                 const dataList = {
                     invoice,
                     operator: operator,
-                    shipping_company: 'null',
-                    operator_name: vandemmia ? 'Vendemmia':'VAPT'
+                    shipping_company: null,
+                    operator_name: vandemmia ? 'Vendemmia':'VAPT',
+                    region: regions[invoice.contato.endereco.uf],
+                    situacao: statusTypeInvoice[invoice.situacao],
+                    canal: canal[invoice.loja.id] ?? "Nenhuma"
                 };
-                await shippingCompany(dataList)
+                await shippingCompany(dataList, vandemmia)
                 return dataList;
             });
             var listInvoice = await Promise.all(listInvoicePromises);
-
             if (data.operatorValue == 1){
                 listInvoice = listInvoice.filter(e => e.operator_name == 'Vendemmia')
             }
@@ -240,4 +304,3 @@ module.exports = {
     }
 };
 
-//time curl --get http://localhost:3000/api
