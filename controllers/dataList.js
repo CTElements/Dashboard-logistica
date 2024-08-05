@@ -74,10 +74,14 @@ async function movvi(id) {
     }
 }
 
-async function vaptData(){
+async function vaptData(data){
     try {
+        var start_date = data.dateStart
+        var end_date = data.dateEnd
+        var limit = data.limit
+        var page = data.page
         const loginUrl = 'https://vector.log.br/api/app/vapt/login';
-        const getHeadsUrl = 'https://vector.log.br/api/app/vapt/get-order-elements';
+        const getHeadsUrl = `https://vector.log.br/api/app/vapt/get-order-elements-novo?start_date=${start_date}&end_date=${end_date}&page=${page}&per_page=${limit}`;
         const loginData = {
             username: '759',
             password: 'X0i#7W4}IPSWjHQqc+04'
@@ -116,8 +120,8 @@ async function notaVandemmia(token, data) {
 }
 
 
-async function shippingCompany(dataList, vandemmia){
-    if (!vandemmia) return dataList.shipping_company = 'VAPT';
+async function shippingCompany(dataList, vandemmia, vaptOparetor){
+    if (!vaptOparetor) return dataList.shipping_company = 'Vendemmia';
    
     switch (vandemmia && dataList.operator?.nomeTransportadora) {
         case 'MOVVI LOGISTICA LTDA':
@@ -258,32 +262,32 @@ module.exports = {
                 shippingCompanyValue: data_body.shippingCompanyValue
             };
 
-            const invoiceBling = await invoices(data, tokenBling);
+           
+            const invoiceBling = await invoices(data, tokenBling);   
             if (invoiceBling.error) {
                 return res.status(500).json({ error: 'Failed to fetch invoices' });
             }
-            console.log(tokenBling)
 
             const vandemmia_data = await notaVandemmia(tokenVandemmia, data);
-            //const vapt_data = await vaptData()
-            //const vaptDateStart = data_body.startDate.year + "-" + data_body.startDate.month + "-" + data_body.startDate.day +"T00:00:00"
-            //const vaptDateEnd = data_body.endDate.year + "-" + data_body.endDate.month + "-" + data_body.endDate.day + "T23:59:59"
-            //const newDataVapt = vapt_data.filter(e => new Date(e.order_date) >= new Date(vaptDateStart) && new Date(e.order_date) <= new Date(vaptDateEnd));
+            const vapt_data = await vaptData(data)
+            
 
             const listInvoicePromises = invoiceBling?.map(async (invoice) => {
                 var numero = invoice.numero.slice(1).toString()
                 var vandemmia = vandemmia_data.find(e => e.noteNumber == numero)
-                var operator = vandemmia ?? { updatedAtFormatted: invoice.dataEmissao, statusNf: statusTypeInvoice[data_body.invoiceStatusValue] }
+                var vaptOparetor = vapt_data.find(e => e.nfe_number == numero)
+                
+                var operator = vandemmia ? vandemmia : vaptOparetor ? vaptOparetor : { updatedAtFormatted: invoice.dataEmissao, statusNf: statusTypeInvoice[data_body.invoiceStatusValue] }
                 const dataList = {
                     invoice,
                     operator: operator,
                     shipping_company: null,
-                    operator_name: vandemmia ? 'Vendemmia':'VAPT',
+                    operator_name: vaptOparetor ? 'VAPT' :'Vendemmia',
                     region: regions[invoice.contato.endereco.uf],
                     situacao: statusTypeInvoice[invoice.situacao],
                     canal: canal[invoice.loja.id] ?? "Nenhuma"
                 };
-                await shippingCompany(dataList, vandemmia)
+                await shippingCompany(dataList, vandemmia, vaptOparetor)
                 return dataList;
             });
             var listInvoice = await Promise.all(listInvoicePromises);
