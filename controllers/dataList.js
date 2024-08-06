@@ -271,7 +271,7 @@ module.exports = {
             const vandemmia_data = await notaVandemmia(tokenVandemmia, data);
             const vapt_data = await vaptData(data)
             
-
+            console.log(tokenBling)
             const listInvoicePromises = invoiceBling?.map(async (invoice) => {
                 var numero = invoice.numero.slice(1).toString()
                 var vandemmia = vandemmia_data.find(e => e.noteNumber == numero)
