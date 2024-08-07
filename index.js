@@ -22,6 +22,33 @@ app.use((error, req, res, next)=>{
     })
    }
 })
+
+app.use(bodyParser.text({ type: '*/*' }));
+
+var types = {
+    "application/json": true,
+    "text/plain": true,
+    "application/javascript": true,
+    "text/html": true,
+    "application/xml": true
+}
+app.use((req, res, next) => {
+    if (types[req.headers['content-type']] && typeof req.body === 'string') {
+        const match = req.body.match(/^([a-zA-Z0-9_]+)=/);
+        if (match) {
+            req.body = req.body.substring(match[0].length);
+            try {
+                req.body = JSON.parse(req.body);
+            } catch (error) {
+                console.error('Falha ao interpretar como JSON:', error);
+            }
+        } else {
+            req.body = JSON.parse(req.body);
+        }
+    }
+    next();
+});
+
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())

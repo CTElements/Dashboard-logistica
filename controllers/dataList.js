@@ -261,7 +261,7 @@ module.exports = {
                 operatorValue: operatorFilter[data_body.operatorValue],
                 shippingCompanyValue: data_body.shippingCompanyValue
             };
-
+ 
            
             const invoiceBling = await invoices(data, tokenBling);   
             if (invoiceBling.error) {

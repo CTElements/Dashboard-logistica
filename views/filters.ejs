@@ -1,0 +1,178 @@
+<div class="painel_right_filter_data">
+    <!-- filter list -->
+    <div class="painel_right_filter_content hide_painel">
+        <!-- filter for date -->
+        <div class="filter_data">
+            <div class="filter_types">
+                <div class="filter_type_date filter_type">
+                    <h2 class="filter_title">Data</h2>
+                    <div class="filter_data_btn">
+                        <div class="icon">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <div class="texts">
+                            <span class="dataStart"></span>
+                            <span>→</span>
+                            <span class="dataEnd"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- filter for status -->
+        <div class="filter_status">
+            <h2 class="filter_title">Status</h2>
+            <form>
+                <div class="filter_status_input">
+                    <input checked type="radio" id="emitida" name="Emitida DANFE" data-type="status">
+                    <label for="emitida">Emitida DANFE</label>
+                </div>
+                <div class="filter_status_input">
+                    <input type="radio" id="status_pendente" name="Pendente" data-type="status">
+                    <label for="status_pendente">Pendente</label>
+                </div>
+                <div class="filter_status_input">
+                    <input type="radio" id="status_cancelada" name="Cancelada" data-type="status">
+                    <label for="status_cancelada">Cancelada</label>
+                </div>
+                <div class="filter_status_input">
+                    <input type="radio" id="autorizada" name="Autorizada" data-type="status">
+                    <label for="autorizada">Autorizada</label>
+                </div>
+                <div class="filter_status_show_more show_more show_more_hide">
+                    <div class="filter_status_input">
+                        <input type="radio" id="aguardando_recibo" name="Aguardando recibo" data-type="status">
+                        <label for="aguardando_recibo">Aguardando recibo</label>
+                    </div>
+                    <div class="filter_status_input">
+                        <input type="radio" id="rejeitada" name="Rejeitada" data-type="status">
+                        <label for="rejeitada">Rejeitada</label>
+                    </div>
+                    <div class="filter_status_input">
+                        <input type="radio" id="aguardando_protocolo" name="Aguardando protocolo" data-type="status">
+                        <label for="aguardando_protocolo">Aguardando protocolo</label>
+                    </div>
+                    <div class="filter_status_input">
+                        <input type="radio" id="denegada" name="Denegada" data-type="status">
+                        <label for="denegada">Denegada</label>
+                    </div>
+                    <div class="filter_status_input">
+                        <input type="radio" id="consulta" name="Consulta situação" data-type="status">
+                        <label for="consulta">Consulta situação</label>
+                    </div>
+                    <div class="filter_status_input">
+                        <input type="radio" id="bloqueada" name="Bloqueada" data-type="status">
+                        <label for="bloqueada">Bloqueada</label>
+                    </div>
+                </div>
+                <span class="btn_show_more btn_show_more_status">Mostrar mais</span>
+            </form>
+        </div>
+        <!-- filter for operator -->
+        <div class="filter_operator">
+            <h2 class="filter_title">Operador</h2>
+            <form>
+                <div class="filter_operator_input">
+                    <input checked type="radio" id="todos" name="Todos" data-type="operador">
+                    <label for="todos">Todos</label>
+                </div>
+                <div class="filter_operator_input">
+                    <input type="radio" id="vapt" name="VAPT" data-type="operador">
+                    <label for="vapt">VAPT</label>
+                </div>
+                <div class="filter_operator_input">
+                    <input type="radio" id="vendemmia" name="Vendemmia" data-type="operador">
+                    <label for="vendemmia">Vendemmia</label>
+                </div>
+            </form>
+        </div>
+        <!-- filter for shipping company -->
+        <div class="filter_shipping_company">
+            <h2 class="filter_title">Transportadora</h2>
+            <form>
+                <div class="filter_shipping_company_input">
+                    <input checked type="radio" id="todos" name="Todas" data-type="shipping_company">
+                    <label for="todos">Todas</label>
+                </div>
+                <div class="filter_shipping_company_input">
+                    <input type="radio" id="movvi" name="Movvi" data-type="shipping_company">
+                    <label for="movvi">Movvi</label>
+                </div>
+                <div class="filter_shipping_company_input">
+                    <input type="radio" id="expresso" name="Expresso São Miguel" data-type="shipping_company">
+                    <label for="expresso">Expresso São Miguel</label>
+                </div>
+                <div class="filter_shipping_company_input">
+                    <input type="radio" id="solistica" name="Solistica" data-type="shipping_company">
+                    <label for="solistica">Solistica</label>
+                </div>
+                <div class="filter_shipping_company_show_more show_more show_more_hide">
+                    <div class="filter_shipping_company_input">
+                        <input type="radio" id="jamef" name="Jamef" data-type="shipping_company">
+                        <label for="jamef">Jamef</label>
+                    </div>
+                    <div class="filter_shipping_company_input">
+                        <input type="radio" id="amazon" name="Amazon" data-type="shipping_company">
+                        <label for="amazon">Amazon</label>
+                    </div>
+                    <div class="filter_shipping_company_input">
+                        <input type="radio" id="mercado_livre" name="Mercado Livre" data-type="shipping_company">
+                        <label for="mercado_livre">Mercado Livre</label>
+                    </div>
+                    <div class="filter_shipping_company_input">
+                        <input type="radio" id="comsil" name="Comsil" data-type="shipping_company">
+                        <label for="comsil">Comsil</label>
+                    </div>
+                    <div class="filter_shipping_company_input">
+                        <input type="radio" id="postales" name="Postales" data-type="shipping_company">
+                        <label for="postales">Postales</label>
+                    </div>
+                    <div class="filter_shipping_company_input">
+                        <input type="radio" id="valdelir" name="Valdelir Frederico" data-type="shipping_company">
+                        <label for="valdelir">Valdelir Frederico</label>
+                    </div>
+                </div>
+                <span class="btn_show_more btn_show_more_company">Mostrar mais</span>
+            </form>
+        </div>
+    </div>
+    <!-- painel filter date -->
+    <div class="painel_filter_date hide_painel">
+        <div class="painel_filter_date_infos">
+            <div class="painel_filter_date_pressets date-picker-presets">
+                <button data-preset="ontem">Ontem</button>
+                <button data-preset="ultimos7dias">Últimos 7 dias</button>
+                <button data-preset="ultimos30dias">Últimos 30 dias</button>
+                <button data-preset="ultimos90dias">Últimos 90 dias</button>
+                <button data-preset="ultimos365dias">Últimos 365 dias</button>
+                <button data-preset="ultimoMes">Último mês</button>
+                <button data-preset="ultimos12meses">Últimos 12 meses</button>
+                <button data-preset="anoPassado">Ano passado</button>
+            </div>
+            <div class="painel_filter_dates">
+                <div class="painel_filter_dates_header">
+                    <input type="text" id="start-date" placeholder="">
+                    <button>&rarr;</button>
+                    <input type="text" id="end-date" placeholder="">
+                </div>
+                <div class="painel_filter_dates_preview">
+                    <button id="prev-month">&larr;</button>
+                    <span id="current-month">Julho de 2024</span>
+                    <button id="next-month">&rarr;</button>
+                </div>
+                <div class="painel_filter_dates_value">
+                    <div class="calendar-grid">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="painel_filter_date_btns">
+            <div class="btns">
+                <span class="painel_filter_date_btn_cancel">Cancelar</span>
+                <span class="painel_filter_date_btn_apply">Aplicar</span>
+            </div>
+        </div>
+    </div>
+
+</div>
